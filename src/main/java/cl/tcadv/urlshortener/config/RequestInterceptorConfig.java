@@ -14,6 +14,6 @@ public class RequestInterceptorConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(urlMetricInterceptor).addPathPatterns("/url/expand/**");
+		registry.addInterceptor(urlMetricInterceptor).addPathPatterns("/url/**");
 	}
 }

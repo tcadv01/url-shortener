@@ -17,3 +17,5 @@ buildNumber.properties
 .classpath
 # Eclipse settings
 .settings/
+/target/
+.metadata/
