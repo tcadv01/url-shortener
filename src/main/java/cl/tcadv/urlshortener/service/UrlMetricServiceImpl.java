@@ -24,7 +24,7 @@ public class UrlMetricServiceImpl implements UrlMetricService {
 			UrlMetric urlMetric = new UrlMetric(urlMetricId, urlId, new Date(), userAgent, ip);
 			this.urlMetricRepository.saveUrlMetric(urlMetric);
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
