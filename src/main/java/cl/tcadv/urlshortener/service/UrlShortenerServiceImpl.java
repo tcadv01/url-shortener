@@ -47,4 +47,13 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
 	private long generateId() {
 		return this.idGenerator.nextId();
 	}
+
+	@Override
+	public UrlDetail expandUrl(long id) throws UrlNotFoundException {
+		UrlDetail urlDetail = this.urlShortenerRepository.getUrl(id);
+		if(urlDetail == null || !urlDetail.isEnabled()) {
+			throw new UrlNotFoundException("url not found");
+		}
+		return urlDetail;
+	}
 }

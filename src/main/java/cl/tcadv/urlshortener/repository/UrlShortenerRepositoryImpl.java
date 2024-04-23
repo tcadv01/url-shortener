@@ -1,5 +1,7 @@
 package cl.tcadv.urlshortener.repository;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,8 +35,20 @@ public class UrlShortenerRepositoryImpl implements UrlShortenerRepository {
 
 	@Override
 	public int updateUrl(UrlDetail url) {
-		int affectedRows = jdbcTemplate.update("update url_detail set url = ?, enabled = ? where id = ?", url.getUrl(),
-				url.isEnabled(), url.getId());
+		ArrayList<Object> params = new ArrayList<Object>();
+		StringBuilder query = new StringBuilder("update url_detail set ");
+		if (url.getUrl() != null) {
+			params.add(url.getUrl());
+			query.append("url = ?,");
+		}
+		if (url.isEnabled() != null) {
+			query.append("enabled = ?,");
+			params.add(url.isEnabled());
+		}
+		query.deleteCharAt(query.length() - 1);
+		query.append(" where id = ?");
+		params.add(url.getId());
+		int affectedRows = jdbcTemplate.update(query.toString(), params.toArray());
 		return affectedRows;
 	}
 

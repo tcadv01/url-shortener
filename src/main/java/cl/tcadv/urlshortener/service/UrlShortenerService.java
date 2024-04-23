@@ -8,5 +8,7 @@ public interface UrlShortenerService {
 
 	public UrlDetail updateUrl(UrlDetail urlDetail) throws UrlNotFoundException;
 
+	public UrlDetail expandUrl(long id) throws UrlNotFoundException;
+
 	public UrlDetail getUrl(long id) throws UrlNotFoundException;
 }

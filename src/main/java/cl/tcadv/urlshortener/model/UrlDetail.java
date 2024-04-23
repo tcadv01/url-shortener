@@ -3,9 +3,9 @@ package cl.tcadv.urlshortener.model;
 public class UrlDetail {
 	private long id;
 	private String url;
-	private boolean enabled;
+	private Boolean enabled;
 
-	public UrlDetail(long id, String url, boolean enabled) {
+	public UrlDetail(long id, String url, Boolean enabled) {
 		super();
 		this.id = id;
 		this.url = url;
@@ -32,11 +32,11 @@ public class UrlDetail {
 		this.url = url;
 	}
 
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 

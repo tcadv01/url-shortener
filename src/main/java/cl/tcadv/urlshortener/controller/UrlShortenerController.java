@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -34,19 +34,19 @@ public class UrlShortenerController {
 		return ResponseEntity.ok(genericResponseDTO);
 	}
 
-	@PutMapping("/url-shortener/{id}")
-	public ResponseEntity<GenericResponseDTO<UrlDetail>> updateUrl(@PathVariable long id,
-			@RequestBody UpdateUrlRequestDTO updateUrlRequestDTO) throws UrlNotFoundException {
+	@PatchMapping("/url-shortener/{id}")
+	public ResponseEntity<GenericResponseDTO<UrlDetail>> patchUrl(@PathVariable long id,
+			@Valid @RequestBody UpdateUrlRequestDTO updateUrlRequestDTO) throws UrlNotFoundException {
 		UrlDetail urlDetail = new UrlDetail(id, updateUrlRequestDTO.getUrl(), updateUrlRequestDTO.isEnabled());
 		urlDetail = this.urlShortenerService.updateUrl(urlDetail);
 		GenericResponseDTO<UrlDetail> genericResponseDTO = new GenericResponseDTO<UrlDetail>(HttpStatus.OK.value(),
-				"success", urlDetail);
+				"success", null);
 		return ResponseEntity.ok(genericResponseDTO);
 	}
 
 	@GetMapping("/url/{id}")
 	public RedirectView expandUrl(@PathVariable long id) throws UrlNotFoundException {
-		UrlDetail urlDetail = this.urlShortenerService.getUrl(id);
+		UrlDetail urlDetail = this.urlShortenerService.expandUrl(id);
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl(urlDetail.getUrl());
 		return redirectView;

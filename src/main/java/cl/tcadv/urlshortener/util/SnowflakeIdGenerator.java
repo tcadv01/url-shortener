@@ -5,10 +5,14 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Enumeration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SnowflakeIdGenerator implements IdGenerator{
+public class SnowflakeIdGenerator implements IdGenerator {
+
+	private static final Logger logger = LoggerFactory.getLogger(SnowflakeIdGenerator.class);
 	private static final int EPOCH_BITS = 41;
 	private static final int NODE_ID_BITS = 10;
 	private static final int SEQUENCE_BITS = 12;
@@ -16,7 +20,6 @@ public class SnowflakeIdGenerator implements IdGenerator{
 	private static final long maxNodeId = (1L << NODE_ID_BITS) - 1;
 	private static final long maxSequence = (1L << SEQUENCE_BITS) - 1;
 
-	// Custom Epoch (January 1, 2015 Midnight UTC = 2015-01-01T00:00:00Z)
 	private static final long DEFAULT_CUSTOM_EPOCH = 1420070400000L;
 
 	private final long nodeId;
@@ -25,11 +28,10 @@ public class SnowflakeIdGenerator implements IdGenerator{
 	private volatile long lastTimestamp = -1L;
 	private volatile long sequence = 0L;
 
-	// Let Snowflake generate a nodeId
 	public SnowflakeIdGenerator() {
 		this.nodeId = createNodeId();
 		this.customEpoch = DEFAULT_CUSTOM_EPOCH;
-		System.out.println("Snowflake Id generator successfully instantiated: "+this.toString());
+		logger.info("Snowflake Id generator successfully instantiated: " + this.toString());
 	}
 
 	@Override
@@ -43,11 +45,9 @@ public class SnowflakeIdGenerator implements IdGenerator{
 		if (currentTimestamp == lastTimestamp) {
 			sequence = (sequence + 1) & maxSequence;
 			if (sequence == 0) {
-				// Sequence Exhausted, wait till next millisecond.
 				currentTimestamp = waitNextMillis(currentTimestamp);
 			}
 		} else {
-			// reset sequence to start with zero for the next millisecond
 			sequence = 0;
 		}
 
@@ -58,12 +58,10 @@ public class SnowflakeIdGenerator implements IdGenerator{
 		return id;
 	}
 
-	// Get current timestamp in milliseconds, adjust for the custom epoch.
 	private long timestamp() {
 		return Instant.now().toEpochMilli() - customEpoch;
 	}
 
-	// Block and wait till next millisecond
 	private long waitNextMillis(long currentTimestamp) {
 		while (currentTimestamp == lastTimestamp) {
 			currentTimestamp = timestamp();

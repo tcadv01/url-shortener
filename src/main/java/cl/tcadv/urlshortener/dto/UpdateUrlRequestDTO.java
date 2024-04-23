@@ -2,20 +2,13 @@ package cl.tcadv.urlshortener.dto;
 
 import org.hibernate.validator.constraints.URL;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.AssertTrue;
 
 public class UpdateUrlRequestDTO {
-	@NotBlank
-	@NotNull
-	@NotEmpty
+
 	@URL
 	private String url;
-	@NotBlank
-	@NotNull
-	@NotEmpty
-	private boolean enabled;
+	private Boolean enabled;
 
 	public UpdateUrlRequestDTO() {
 		super();
@@ -29,16 +22,23 @@ public class UpdateUrlRequestDTO {
 		this.url = url;
 	}
 
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 
-	@Override
-	public String toString() {
-		return "UpdateUrlRequestDTO [url=" + url + ", enabled=" + enabled + "]";
+	@AssertTrue
+	public boolean isValid() {
+		if (url == null && enabled == null) {
+			return false;
+		}
+		if (url != null && url.trim().equals("")) {
+			return false;
+		}
+		return true;
 	}
+
 }
