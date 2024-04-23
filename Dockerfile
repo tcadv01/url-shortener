@@ -3,6 +3,6 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk:17.0.1-jdk-slim
-COPY --from=build /target/url-shortener-0.0.2-SNAPSHOT.jar demo.jar
+COPY --from=build /target/url-shortener-0.0.3-SNAPSHOT.jar demo.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","demo.jar"]
