@@ -2,6 +2,8 @@ package cl.tcadv.urlshortener.service;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import cl.tcadv.urlshortener.util.IdGenerator;
 
 @Service
 public class UrlMetricServiceImpl implements UrlMetricService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(UrlMetricServiceImpl.class);
 
 	@Autowired
 	private IdGenerator idGenerator;
@@ -24,7 +28,7 @@ public class UrlMetricServiceImpl implements UrlMetricService {
 			UrlMetric urlMetric = new UrlMetric(urlMetricId, urlId, new Date(), userAgent, ip);
 			this.urlMetricRepository.saveUrlMetric(urlMetric);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("there was an error recording metrics", e);
 		}
 	}
 
